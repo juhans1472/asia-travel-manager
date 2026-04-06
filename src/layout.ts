@@ -34,16 +34,16 @@ export const baseLayout = (title: string, content: string, activeNav = 'home') =
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta name="theme-color" content="#f59e0b">
-  <meta name="description" content="현지 교민·가이드가 직접 짜준 아시아 여행 플랫폼 - 로컬 가이드 매칭, 가성비 숙소·맛집·투어">
-  <meta property="og:title" content="${title} - 로컬가이드 여행매니저">
+  <meta name="description" content="현지 교민·가이드가 직접 짜주는 아시아 여행 플랫폼 - 가이드 매칭, 가성비 숙소·맛집·투어">
+  <meta property="og:title" content="${title} - 가이드 여행매니저">
   <meta property="og:type" content="website">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="/static/icons/icon-152.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="로컬여행">
+  <meta name="apple-mobile-web-app-title" content="가이드여행">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
-  <title>${title} - 로컬가이드 여행매니저</title>
+  <title>${title} - 가이드 여행매니저</title>
   <link rel="stylesheet" href="/static/tailwind.css">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <style>
