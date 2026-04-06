@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.wrangler/
+.env
+.dev.vars
+*.log
+.pm2/
+pids/
+logs/
+*.backup
+*.tar.gz
