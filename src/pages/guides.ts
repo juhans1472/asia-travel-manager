@@ -44,7 +44,7 @@ export const guidesPage = (country = '') => {
         +'<img src="'+g.avatar+'" class="w-14 h-14 rounded-full object-cover border-2 flex-shrink-0" style="border-color:'+(isSuper?'#f59e0b':'#1e1e2e')+'">'
         +'<div class="flex-1 min-w-0">'
         +'<div class="flex items-center gap-1 mb-0.5"><p class="text-sm font-black text-slate-100 truncate">'+g.name+'</p>'
-        +(g.verified?'<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:\'FILL\' 1">verified</span>':'')
+        +(g.verified?'<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:&#39;FILL&#39; 1">verified</span>':'')
         +'</div>'
         +'<p class="text-xs text-slate-400 mb-1">'+g.flag+' '+g.city+' · '+g.tagline+'</p>'
         +'<div class="flex items-center gap-2 flex-wrap mb-2">'
@@ -57,7 +57,7 @@ export const guidesPage = (country = '') => {
         +'<div class="flex gap-1 flex-wrap">'+tagStr+'</div>'
         +'</div></div>'
         +'<div class="flex gap-2 mt-3">'
-        +'<button onclick="event.preventDefault();supportGuide(\''+g.id+'\',\''+g.name+'\','+g.support_price+')" class="flex-1 py-2 rounded-xl text-xs font-bold press" style="background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b">☕ 후원하기</button>'
+        +'<button data-gid="'+g.id+'" data-gname="'+g.name.replace(/"/g,"&quot;")+'" data-gprice="'+g.support_price+'" onclick="event.preventDefault();window.supportGuide(this.dataset.gid,this.dataset.gname,this.dataset.gprice)" class="flex-1 py-2 rounded-xl text-xs font-bold press" style="background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b">☕ 후원하기</button>'
         +'<span class="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold" style="background:#13131a;color:#94a3b8">투어 보기 →</span>'
         +'</div>'
         +'</a>';
@@ -121,7 +121,7 @@ function guideCard(g: typeof ALL_GUIDES[0]) {
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-1 mb-0.5">
         <p class="text-sm font-black text-slate-100 truncate">${g.name}</p>
-        ${g.verified ? '<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:\'FILL\' 1">verified</span>' : ''}
+        ${g.verified ? '<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:&#39;FILL&#39; 1">verified</span>' : ''}
       </div>
       <p class="text-xs text-slate-400 mb-1">${g.flag} ${g.city} · ${g.tagline}</p>
       <div class="flex items-center gap-2 flex-wrap mb-2">
@@ -172,7 +172,7 @@ export const guideDetailPage = (id: string) => {
         <div class="flex-1">
           <div class="flex items-center gap-1 mb-1">
             <h2 class="text-lg font-black text-slate-100">${g.name}</h2>
-            ${g.verified ? '<span class="material-symbols-outlined text-base verified" style="font-variation-settings:\'FILL\' 1">verified</span>' : ''}
+            ${g.verified ? '<span class="material-symbols-outlined text-base verified" style="font-variation-settings:&#39;FILL&#39; 1">verified</span>' : ''}
           </div>
           <p class="text-xs text-slate-400">${g.flag} ${g.city} · ${g.countryName}</p>
           <div class="flex items-center gap-1 mt-1">

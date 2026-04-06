@@ -153,7 +153,7 @@ export const tipsPage = (tab = 'currency') => {
           <li>• 여권 유효기간: 귀국일 기준 최소 6개월 이상 남아있어야 함</li>
           <li>• 왕복 항공권 및 체류 증명 서류 지참 권장</li>
           <li>• 출입국 신고서: 일부 국가 공항에서 작성 필요</li>
-          <li>• 여행자 보험 필수 가입 권장</li>
+          <li>• 여행 보험 필수 가입 권장</li>
         </ul>
       </div>
     </div>
@@ -161,7 +161,7 @@ export const tipsPage = (tab = 'currency') => {
     <!-- 짐 챙기기 -->
     <div id="tip_packing" class="${tab!=='packing'?'hidden':''} space-y-3">
       ${[
-        {title:'필수 서류', icon:'📄', color:'#0ea5e9', items:['여권 (사본 별도 보관)','항공권 e-ticket','숙소 예약 확인서','여행자 보험 증서','긴급 연락처 메모']},
+        {title:'필수 서류', icon:'📄', color:'#0ea5e9', items:['여권 (사본 별도 보관)','항공권 e-ticket','숙소 예약 확인서','여행 보험 증서','긴급 연락처 메모']},
         {title:'전자기기', icon:'🔌', color:'#a855f7', items:['스마트폰 + 충전기','보조배터리 (기내반입)','멀티어댑터/변환 플러그','이어폰/헤드셋','카메라 (선택)']},
         {title:'건강/위생', icon:'💊', color:'#22c55e', items:['상비약 (소화제, 지사제, 진통제)','선크림 SPF50+','모기 기피제 (동남아)','마스크','손 소독제']},
         {title:'의류/편의', icon:'👕', color:'#f59e0b', items:['가벼운 겉옷 (냉방 대비)','슬리퍼/편한 신발','우산/우비','수영복 (해변 지역)','세탁망']},
@@ -192,7 +192,7 @@ export const tipsPage = (tab = 'currency') => {
         },
         {country:'베트남', flag:'🇻🇳', color:'#22c55e',
           nums:[{label:'경찰', num:'113'},{label:'소방', num:'114'},{label:'구급', num:'115'},{label:'한국대사관(하노이)', num:'+84-24-3831-5110'}],
-          tips:['소매치기 주의 (가방 앞으로)','오토바이 픽소매치기 주의','여행자 보험 필수'],
+          tips:['소매치기 주의 (가방 앞으로)','오토바이 픽소매치기 주의','여행 보험 필수'],
         },
       ].map(e => `
       <div class="card overflow-hidden">

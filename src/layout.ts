@@ -15,7 +15,7 @@ export const baseLayout = (title: string, content: string, activeNav = 'home') =
     { key: 'tours',   icon: 'luggage',        label: '투어',   href: '/tours' },
     { key: 'guides',  icon: 'support_agent',  label: '가이드', href: '/guides' },
     { key: 'cart',    icon: 'shopping_cart',  label: '장바구니', href: '/cart' },
-    { key: 'my',      icon: 'account_circle', label: '마이',   href: '/my' },
+    { key: 'my',      icon: 'account_circle', label: '내여행', href: '/my' },
   ]
 
   const navHtml = navItems.map(n => {

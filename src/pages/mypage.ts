@@ -30,7 +30,7 @@ export const myPage = (defaultTab = 'bookings') => {
           <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2" style="border-color:#0a0a0f"></div>
         </div>
         <div class="flex-1">
-          <h2 class="text-slate-100 font-black text-lg" id="profileName">여행자</h2>
+          <h2 class="text-slate-100 font-black text-lg" id="profileName">내여행</h2>
           <p class="text-sm text-slate-500" id="profileSub">아시아 여행 탐험가</p>
           <div class="flex items-center gap-1 mt-1">
             <span class="text-lg" id="profileBadgeIcon">✨</span>
@@ -190,7 +190,7 @@ export const myPage = (defaultTab = 'bookings') => {
       <div class="space-y-3">
         <div>
           <label class="text-xs text-slate-500 mb-1 block">이름</label>
-          <input type="text" id="editName" placeholder="여행자 이름">
+          <input type="text" id="editName" placeholder="내여행 닉네임">
         </div>
         <div>
           <label class="text-xs text-slate-500 mb-1 block">소개</label>
@@ -236,7 +236,7 @@ export const myPage = (defaultTab = 'bookings') => {
 
     var badge=document.getElementById('profileBadge');var bi=document.getElementById('profileBadgeIcon');
     var n=bookings.length;
-    if(badge){badge.textContent=n>=20?'아시아 마스터':n>=10?'베테랑 여행자':n>=5?'여행 중급자':n>=1?'여행 초보자':'여행 시작';}
+    if(badge){badge.textContent=n>=20?'아시아 마스터':n>=10?'베테랑 내여행러':n>=5?'내여행 중급자':n>=1?'내여행 초보자':'내여행 시작';}
     if(bi){bi.textContent=n>=20?'🌏':n>=10?'✈️':n>=5?'🗺':n>=1?'🚀':'✨';}
   }
 
@@ -266,7 +266,7 @@ export const myPage = (defaultTab = 'bookings') => {
         +'<div><p class="text-xs text-slate-500">납입 예약금</p>'
         +'<p class="font-black text-sm" style="color:#f97316">₩'+(b.depositPaid||0).toLocaleString()+'</p></div>'
         +'<div class="flex gap-2">'
-        +(b.status!=='취소'&&b.status!=='완료'?'<button onclick="openCancelModal(\''+b.id+'\')" class="text-xs px-3 py-1.5 rounded-xl font-bold press" style="background:#ef444411;border:1px solid #ef444433;color:#ef4444">취소</button>':'')
+        +(b.status!=='취소'&&b.status!=='완료'?'<button data-bkid="'+b.id+'" onclick="window.openCancelModal(this.dataset.bkid)" class="text-xs px-3 py-1.5 rounded-xl font-bold press" style="background:#ef444411;border:1px solid #ef444433;color:#ef4444">취소</button>':'')
         +'<p class="text-[10px] text-slate-600">'+new Date(b.bookedAt).toLocaleDateString()+'</p>'
         +'</div>'
         +'</div>'
@@ -292,7 +292,7 @@ export const myPage = (defaultTab = 'bookings') => {
         +'<p class="text-xs text-slate-500">'+(f.country||'')+(f.city?' · '+f.city:'')+'</p>'
         +(f.savedAt?'<p class="text-xs text-slate-600">'+new Date(f.savedAt).toLocaleDateString()+'</p>':'')
         +'</div>'
-        +'<button onclick="removeFav(\''+f.id+'\')" class="text-slate-500 press"><span class="material-symbols-outlined text-base">delete</span></button>'
+        +'<button data-fid="'+f.id+'" onclick="window.removeFav(this.dataset.fid)" class="text-slate-500 press"><span class="material-symbols-outlined text-base">delete</span></button>'
         +'</div>';
     }).join('');
   }
@@ -380,15 +380,16 @@ export const myPage = (defaultTab = 'bookings') => {
       var tours=b.tours?b.tours.map(function(t){return t.title;}).join(' / '):(b.title||'');
       return [b.id,b.date,b.status,b.name,b.contact,b.pax||1,tours,(b.depositPaid||0)];
     });
-    var csv=[headers.join(',')].concat(rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');})).join('\n');
+    var nl=String.fromCharCode(10);
+    var csv=[headers.join(',')].concat(rows.map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');})).join(nl);
     var blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
     var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bookings-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
   };
   window.exportTripText=function(){
     var trips=[];try{trips=JSON.parse(localStorage.getItem('tm_trips')||'[]');}catch(e){}
     if(!trips||trips.length===0){alert('저장된 여행 일정이 없습니다.');return;}
-    var nl='\n';
-    var lines=['===== 로컬가이드 여행매니저 일정표 =====',nl];
+    var nl=String.fromCharCode(10);
+    var lines=['===== 가이드 여행매니저 일정표 =====',nl];
     trips.forEach(function(t){
       lines.push('['+t.title+']');
       if(t.startDate)lines.push('기간: '+t.startDate+' ~ '+t.endDate);
@@ -424,7 +425,7 @@ export const myPage = (defaultTab = 'bookings') => {
 
   /* ── 전체 초기화 ── */
   window.clearAllData=function(){
-    if(!confirm('모든 데이터를 초기화하시겠습니까?\n(예약, 즐겨찾기, 장바구니, 일정)'))return;
+    if(!confirm('모든 데이터를 초기화하시겠습니까?'+String.fromCharCode(10)+'(예약, 즐겨찾기, 장바구니, 일정)'))return;
     ['lg_cart','lg_favs','lg_bookings','tm_trips','tm_recent'].forEach(function(k){localStorage.removeItem(k);});
     updateStats();renderBookings();renderFavs();renderTrips();
     window.LG&&window.LG.showToast('초기화 완료','#ef4444');
@@ -433,7 +434,7 @@ export const myPage = (defaultTab = 'bookings') => {
   /* ── PWA 설치 ── */
   window.installPWA=function(){
     if(window._deferredPrompt){window._deferredPrompt.prompt();window._deferredPrompt=null;}
-    else{alert('iOS: 하단 공유 버튼 → "홈 화면에 추가"\nAndroid: 브라우저 메뉴 → "홈 화면에 추가"');}
+    else{alert('iOS: 하단 공유 버튼 → '+String.fromCharCode(10)+'홈 화면에 추가'+String.fromCharCode(10)+'Android: 브라우저 메뉴 → 홈 화면에 추가');}
   };
 
   /* ── 프로필 ── */

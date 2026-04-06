@@ -106,7 +106,7 @@ export const toursPage = (country = '', theme = '') => {
         +'<p class="text-xs text-slate-500 mb-3">예약금 '+t.depositRate+'% (₩'+(Math.round(t.price*t.depositRate/100)).toLocaleString()+') 결제 후 확정</p>'
         +'</div></a>'
         +'<div class="px-3 pb-3 flex gap-2">'
-        +'<button onclick="toggleCart(this,\''+t.id+'\','+JSON.stringify(t).replace(/'/g,"\\'")+'" class="flex-1 py-2.5 rounded-xl text-sm font-bold press" id="cb_'+t.id+'" style="'+( inCart?'background:#f59e0b;color:#0a0a0f':'background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b')+'">'+( inCart?'✓ 담김':'🛒 장바구니')+'</button>'
+        +'<button data-tid="'+t.id+'" onclick="window.toggleCart(this,this.dataset.tid)" class="flex-1 py-2.5 rounded-xl text-sm font-bold press" id="cb_'+t.id+'" style="'+(inCart?'background:#f59e0b;color:#0a0a0f':'background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b')+'">'+( inCart?'&#10003; 담김':'🛒 장바구니')+'</button>'
         +'<a href="/tour/'+t.id+'" class="flex-1 py-2.5 rounded-xl text-sm font-bold text-center press" style="background:#13131a;border:1px solid #1e1e2e;color:#94a3b8">자세히</a>'
         +'</div>'
         +'</div>';
@@ -127,15 +127,21 @@ export const toursPage = (country = '', theme = '') => {
     if(btn){btn.style.background='#f59e0b';btn.style.color='#0a0a0f';btn.style.borderColor='#f59e0b';}
     renderTours();
   };
-  window.toggleCart=function(btn,id,tourJson){
+  window.toggleCart=function(btn,id){
     if(!window.LG)return;
-    var tour=typeof tourJson==='object'?tourJson:JSON.parse(tourJson);
+    var tour=tours.find(function(x){return x.id===id;});
+    if(!tour)return;
     if(window.LG.isInCart(id)){
-      window.LG.removeCart(id);btn.textContent='🛒 장바구니';btn.style.background='#f59e0b22';btn.style.color='#f59e0b';btn.style.borderColor='1px solid #f59e0b44';btn.style.border='1px solid #f59e0b44';
+      window.LG.removeCart(id);
+      btn.textContent='🛒 장바구니';
+      btn.style.background='#f59e0b22';btn.style.color='#f59e0b';btn.style.border='1px solid #f59e0b44';
     }else{
-      window.LG.addCart({id:tour.id,title:tour.title,price:tour.price,flag:tour.flag,city:tour.city,country:tour.country,img:tour.img,depositRate:tour.depositRate,guideId:tour.guideId});
-      btn.textContent='✓ 담김';btn.style.background='#f59e0b';btn.style.color='#0a0a0f';btn.style.border='none';
+      window.LG.addCart({id:tour.id,title:tour.title,price:tour.price,flag:tour.flag,city:tour.city,country:tour.country,img:tour.img,depositRate:tour.depositRate,guideId:tour.guideId,type:'tour'});
+      btn.textContent='&#10003; 담김';
+      btn.style.background='#f59e0b';btn.style.color='#0a0a0f';btn.style.border='none';
+      window.LG.showToast&&window.LG.showToast(tour.title+' 장바구니에 담겼습니다','#22c55e');
     }
+    window.LG.updateCartBadge&&window.LG.updateCartBadge();
   };
 
   if(curCountry)window.setTCountry(curCountry);
@@ -213,7 +219,7 @@ export const tourDetailPage = (id: string) => {
   <div class="flex-1 min-w-0">
     <div class="flex items-center gap-1 mb-0.5">
       <p class="text-sm font-black text-slate-100">${g.name}</p>
-      ${g.verified ? '<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:\'FILL\' 1">verified</span>' : ''}
+      ${g.verified ? '<span class="material-symbols-outlined text-sm verified" style="font-variation-settings:&#39;FILL&#39; 1">verified</span>' : ''}
     </div>
     <p class="text-xs text-slate-400">${g.flag} ${g.city} · ${g.tagline}</p>
     <div class="flex items-center gap-2 mt-1">
