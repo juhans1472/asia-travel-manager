@@ -56,56 +56,15 @@ export const guidesPage = (country = '') => {
         +'<div class="flex gap-1 flex-wrap mb-2">'+thStr+'</div>'
         +'<div class="flex gap-1 flex-wrap">'+tagStr+'</div>'
         +'</div></div>'
-        +'<div class="flex gap-2 mt-3">'
-        +'<button data-gid="'+g.id+'" data-gname="'+g.name.replace(/"/g,"&quot;")+'" data-gprice="'+g.support_price+'" onclick="event.preventDefault();window.supportGuide(this.dataset.gid,this.dataset.gname,this.dataset.gprice)" class="flex-1 py-2 rounded-xl text-xs font-bold press" style="background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b">☕ 후원하기</button>'
-        +'<span class="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold" style="background:#13131a;color:#94a3b8">투어 보기 →</span>'
+        +'<div class="mt-3">'
+        +'<span class="flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold w-full" style="background:#f59e0b22;border:1px solid #f59e0b33;color:#f59e0b">투어 & 후원 보기 →</span>'
         +'</div>'
         +'</a>';
     }).join('');
   };
 
-  window.supportGuide=function(id,name,price){
-    var modal=document.getElementById('supportModal');
-    if(modal){
-      document.getElementById('smName').textContent=name;
-      document.getElementById('smId').value=id;
-      document.getElementById('smPrice').value=price;
-      modal.classList.remove('hidden');modal.classList.add('flex');
-    }
-  };
-  window.closeSupportModal=function(){
-    var m=document.getElementById('supportModal');
-    if(m){m.classList.add('hidden');m.classList.remove('flex');}
-  };
-  window.confirmSupport=function(){
-    var name=document.getElementById('smName').textContent;
-    var price=parseInt(document.getElementById('smPrice').value)||10000;
-    window.LG&&window.LG.showToast('☕ '+name+' 가이드에게 ₩'+price.toLocaleString()+' 후원했습니다!');
-    window.closeSupportModal();
-  };
 })();
   </script>
-
-  <!-- 후원 모달 -->
-  <div id="supportModal" class="fixed inset-0 z-50 hidden items-center justify-center" style="background:rgba(0,0,0,.8)">
-    <div class="card w-full max-w-[360px] mx-4 p-5 border" style="border-color:#f59e0b44">
-      <div class="text-center mb-4">
-        <p class="text-3xl mb-2">☕</p>
-        <h3 class="font-black text-lg text-slate-100">가이드 후원하기</h3>
-        <p class="text-sm text-slate-400 mt-1"><span id="smName"></span> 가이드에게 후원합니다</p>
-      </div>
-      <input type="hidden" id="smId">
-      <div class="space-y-3 mb-4">
-        <p class="text-xs text-slate-500 text-center">후원 금액 선택</p>
-        <div class="grid grid-cols-3 gap-2">
-          ${[5000,10000,20000].map(a => `<button onclick="document.getElementById('smPrice').value=${a}" class="py-2 rounded-xl border text-sm font-bold press" style="background:#13131a;border-color:#1e1e2e;color:#94a3b8">₩${a.toLocaleString()}</button>`).join('')}
-        </div>
-        <input type="number" id="smPrice" value="10000" placeholder="직접 입력 (원)">
-      </div>
-      <button onclick="confirmSupport()" class="w-full py-3 rounded-xl font-black press" style="background:#f59e0b;color:#0a0a0f">후원하기 ☕</button>
-      <button onclick="closeSupportModal()" class="w-full mt-2 py-2 text-sm text-slate-500 press">취소</button>
-    </div>
-  </div>
   `
   return baseLayout('현지 가이드', content, 'guides')
 }
@@ -135,9 +94,7 @@ function guideCard(g: typeof ALL_GUIDES[0]) {
     </div>
   </div>
   <div class="flex gap-2 mt-3">
-    <button onclick="event.preventDefault();supportGuide('${g.id}','${g.name}',${g.support_price})"
-            class="flex-1 py-2 rounded-xl text-xs font-bold press" style="background:#f59e0b22;border:1px solid #f59e0b44;color:#f59e0b">☕ 후원하기</button>
-    <span class="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold" style="background:#13131a;color:#94a3b8">투어 보기 →</span>
+    <span class="flex-1 flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold" style="background:#f59e0b22;border:1px solid #f59e0b33;color:#f59e0b">투어 & 후원 보기 →</span>
   </div>
 </a>`
 }

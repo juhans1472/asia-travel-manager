@@ -111,19 +111,7 @@ export const homePage = () => {
       </a>
     </div>
 
-    <!-- ── SECTION 7: 후원 배너 ── -->
-    <div class="px-4">
-      <div class="rounded-2xl p-4" style="background:linear-gradient(135deg,#13131a,#1a1200);border:1px solid #2e2000">
-        <div class="flex items-center gap-3">
-          <span class="text-2xl">☕</span>
-          <div class="flex-1">
-            <p class="text-sm font-black text-white">가이드에게 커피 한 잔</p>
-            <p class="text-[10px] text-slate-500 mt-0.5">활동을 응원해 주세요</p>
-          </div>
-          <a href="/guides" class="flex-shrink-0 px-3 py-2 rounded-xl text-xs font-bold press" style="background:#f59e0b;color:#0a0a0f">후원</a>
-        </div>
-      </div>
-    </div>
+
 
   </div>
 
