@@ -2,7 +2,9 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-workers'
 import { homePage } from './pages/home'
-import { destinationsPage, destinationDetailPage } from './pages/destinations'
+import { toursPage, tourDetailPage } from './pages/tours'
+import { guidesPage, guideDetailPage } from './pages/guides'
+import { cartPage } from './pages/cart'
 import { plannerPage } from './pages/planner'
 import { tipsPage } from './pages/tips'
 import { myPage } from './pages/mypage'
@@ -35,30 +37,50 @@ app.get('/sw.js', async (c) => {
 app.use('/api/*', cors({ origin: '*', allowMethods: ['GET','POST','PATCH','DELETE','OPTIONS'] }))
 
 // API 엔드포인트
-app.get('/api/destinations', (c) => {
+app.get('/api/tours', (c) => {
   const country = c.req.query('country') || ''
   const theme   = c.req.query('theme')   || ''
   return c.json({ country, theme, message: 'Use the web pages for full functionality' })
 })
 
-app.get('/api/trips', (c) => {
-  return c.json({ message: 'Trips are stored client-side via localStorage' })
+app.get('/api/guides', (c) => {
+  return c.json({ message: 'Use /guides page for full guide listings' })
 })
 
-// ── 페이지 라우트 ──────────────────────────────────
+app.get('/api/bookings', (c) => {
+  return c.json({ message: 'Bookings are stored client-side via localStorage' })
+})
+
+// ── 홈 ──────────────────────────────────────────────────
 app.get('/', (c) => c.html(homePage()))
 
-app.get('/destinations', (c) => {
+// ── 투어 ────────────────────────────────────────────────
+app.get('/tours', (c) => {
   const country = c.req.query('country') || ''
   const theme   = c.req.query('theme')   || ''
-  return c.html(destinationsPage(country, theme))
+  return c.html(toursPage(country, theme))
 })
 
-app.get('/destination/:id', (c) => {
+app.get('/tour/:id', (c) => {
   const id = c.req.param('id')
-  return c.html(destinationDetailPage(id))
+  return c.html(tourDetailPage(id))
 })
 
+// ── 가이드 ──────────────────────────────────────────────
+app.get('/guides', (c) => {
+  const country = c.req.query('country') || ''
+  return c.html(guidesPage(country))
+})
+
+app.get('/guide/:id', (c) => {
+  const id = c.req.param('id')
+  return c.html(guideDetailPage(id))
+})
+
+// ── 장바구니 ────────────────────────────────────────────
+app.get('/cart', (c) => c.html(cartPage()))
+
+// ── 플래너 ──────────────────────────────────────────────
 app.get('/planner', (c) => {
   const dest    = c.req.query('dest')    || ''
   const city    = c.req.query('city')    || ''
@@ -67,11 +89,16 @@ app.get('/planner', (c) => {
   return c.html(plannerPage(dest, city, country, flag))
 })
 
+// ── 팁 ──────────────────────────────────────────────────
 app.get('/tips', (c) => {
   const tab = c.req.query('tab') || 'currency'
   return c.html(tipsPage(tab))
 })
 
-app.get('/my', (c) => c.html(myPage()))
+// ── 마이페이지 ──────────────────────────────────────────
+app.get('/my', (c) => {
+  const tab = c.req.query('tab') || 'bookings'
+  return c.html(myPage(tab))
+})
 
 export default app
