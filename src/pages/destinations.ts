@@ -125,7 +125,8 @@ export const destinationsPage = (country = '', theme = '') => {
       var matchT=!curTheme||s.theme===curTheme;
       var q=curSearch.toLowerCase();
       // 검색어에 '환전' 포함시 모든 결과 표시
-      var searchText=(s.name+s.city+s.countryName+s.tags.join('')+'환전소환전환율').toLowerCase();
+      var tagsText = (s.tags && Array.isArray(s.tags)) ? s.tags.join('') : '';
+      var searchText=(s.name+s.city+s.countryName+tagsText+'환전소환전환율').toLowerCase();
       var matchS=!q||searchText.indexOf(q)>=0;
       
       // 디버그: 각 항목의 매칭 상태 (처음 3개만)
