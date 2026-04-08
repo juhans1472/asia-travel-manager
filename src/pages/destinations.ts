@@ -56,8 +56,12 @@ export const destinationsPage = (country = '', theme = '') => {
 
     <!-- Debug info -->
     <div class="px-4 mb-3">
-      <div id="debugInfo" class="p-3 rounded-lg" style="background:#0f172a;border:2px solid #22c55e;color:#22c55e;font-family:monospace;font-size:12px;line-height:1.6">
-        초기화 중...
+      <div id="debugInfo" class="p-4 rounded-lg" style="background:#10b981;color:#fff;font-family:sans-serif;font-size:16px;font-weight:700;line-height:1.8;box-shadow:0 4px 12px rgba(16,185,129,0.3)">
+        ⏳ 초기화 중...
+      </div>
+      <div id="liveInput" class="mt-2 p-3 rounded-lg" style="background:#0f172a;border:2px solid #f59e0b;color:#f59e0b;font-family:monospace;font-size:14px;min-height:50px">
+        <div>⌨️ <strong>실시간 입력:</strong> <span id="liveInputText">없음</span></div>
+        <div class="mt-1">🔍 <strong>이벤트 감지:</strong> <span id="eventStatus">대기중...</span></div>
       </div>
     </div>
 
@@ -260,7 +264,15 @@ export const destinationsPage = (country = '', theme = '') => {
       
       // input 이벤트 (타이핑할 때마다)
       searchInput.addEventListener('input', function(e){
-        console.log('📝 Input event detected!', e.target.value);
+        var val = e.target.value;
+        console.log('📝 Input event detected!', val);
+        
+        // 실시간 입력 표시
+        var liveText = document.getElementById('liveInputText');
+        var eventStatus = document.getElementById('eventStatus');
+        if(liveText) liveText.textContent = val || '(비어있음)';
+        if(eventStatus) eventStatus.textContent = '✅ 이벤트 발생! (' + new Date().toLocaleTimeString() + ')';
+        
         window.filterSpots();
       });
       
