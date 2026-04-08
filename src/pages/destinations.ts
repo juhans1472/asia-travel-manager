@@ -201,6 +201,19 @@ export const destinationsPage = (country = '', theme = '') => {
 
   if(curCountry){window.setCountry(curCountry);}
   if(curTheme){window.setTheme(curTheme);}
+  
+  // URL 파라미터에서 검색어 가져오기
+  var urlParams = new URLSearchParams(window.location.search);
+  var searchParam = urlParams.get('search');
+  if(searchParam){
+    var input = document.getElementById('searchInput');
+    if(input){
+      input.value = searchParam;
+      curSearch = searchParam;
+      console.log('[Init] Auto-search from URL:', searchParam);
+    }
+  }
+  
   render();
 })();
   </script>

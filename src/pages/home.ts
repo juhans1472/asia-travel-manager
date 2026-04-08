@@ -16,14 +16,21 @@ export const homePage = () => {
         </div>
       </div>
       <div class="flex gap-2">
-        <a href="/tours" class="w-9 h-9 flex items-center justify-center rounded-full press" style="background:#13131a;border:1px solid #1e1e2e">
+        <button onclick="toggleSearch()" class="w-9 h-9 flex items-center justify-center rounded-full press" style="background:#13131a;border:1px solid #1e1e2e">
           <span class="material-symbols-outlined text-slate-300" style="font-size:20px">search</span>
-        </a>
+        </button>
         <a href="/cart" class="relative w-9 h-9 flex items-center justify-center rounded-full press" style="background:#13131a;border:1px solid #1e1e2e">
           <span class="material-symbols-outlined text-slate-300" style="font-size:20px">shopping_cart</span>
           <span class="cart-badge cart-badge-count" style="display:none">0</span>
         </a>
       </div>
+    </div>
+    
+    <!-- 검색창 (토글) -->
+    <div id="searchBar" class="mt-3 relative" style="display:none">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
+      <input type="text" id="homeSearchInput" placeholder="가이드, 투어, 도시 검색..." onkeydown="if(event.key==='Enter')handleSearch()" style="background:#13131a;border:1px solid #1e1e2e;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
+      <button onclick="handleSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg text-xs font-bold press" style="background:#f59e0b;color:#0a0a0f">검색</button>
     </div>
   </header>
 
@@ -253,6 +260,39 @@ export const homePage = () => {
     updateLabels(code);
     renderGuideFeed(code);
     renderTourFeed(code);
+  };
+
+  /* ── 검색창 토글 ── */
+  window.toggleSearch = function() {
+    var bar = document.getElementById('searchBar');
+    if (!bar) return;
+    
+    if (bar.style.display === 'none') {
+      bar.style.display = 'block';
+      setTimeout(function() {
+        var input = document.getElementById('homeSearchInput');
+        if (input) input.focus();
+      }, 100);
+    } else {
+      bar.style.display = 'none';
+    }
+  };
+  
+  /* ── 검색 실행 ── */
+  window.handleSearch = function() {
+    var input = document.getElementById('homeSearchInput');
+    if (!input) return;
+    
+    var query = input.value.trim();
+    if (!query) {
+      alert('검색어를 입력해주세요');
+      return;
+    }
+    
+    console.log('[Home Search] Query:', query);
+    
+    // 검색 결과 페이지로 이동
+    window.location.href = '/destinations?search=' + encodeURIComponent(query);
   };
 
   /* ── 초기 렌더 ── */
