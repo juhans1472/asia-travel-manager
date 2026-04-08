@@ -48,6 +48,22 @@ export const homePage = () => {
       </div>
     </div>
 
+    <!-- ── 환전소 찾기 버튼 ── -->
+    <div class="px-4 -mt-2">
+      <a href="/tips?tab=currency" class="w-full flex items-center justify-between p-4 rounded-2xl press" style="background:linear-gradient(135deg,#22c55e,#10b981);border:2px solid #22c55e44">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background:rgba(255,255,255,0.2)">
+            🏦
+          </div>
+          <div>
+            <p class="text-white font-black text-base">환전소 찾기</p>
+            <p class="text-green-100 text-xs mt-0.5">실시간 환율 · 20+ 도시 환전소 정보</p>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-white text-2xl">chevron_right</span>
+      </a>
+    </div>
+
     <!-- ── SECTION 2: 선택된 국가 라벨 ── -->
     <div class="px-4 -mt-2">
       <div class="flex items-center justify-between">
