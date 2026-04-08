@@ -1,4 +1,4 @@
-import { baseLayout, DESTINATIONS } from '../layout'
+import { baseLayout, COUNTRIES } from '../layout'
 
 const ALL_SPOTS = [
   // ─── 일본 ───
@@ -60,9 +60,9 @@ export const destinationsPage = (country = '', theme = '') => {
       <div class="flex gap-2 overflow-x-auto ns pb-1">
         <button onclick="setCountry('')" id="cfALL" class="filter-btn flex-shrink-0 px-3 py-1.5 rounded-full border text-xs font-bold press active"
                 style="background:#0ea5e9;color:#fff;border-color:#0ea5e9">전체</button>
-        ${DESTINATIONS.map(d => `
+        ${COUNTRIES.filter(c => ['JP','TH','VN','TW','SG','ID','MY','HK'].includes(c.code)).map(d => `
         <button onclick="setCountry('${d.code}')" id="cf${d.code}" class="filter-btn flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs font-bold press"
-                style="background:#0f172a;border-color:#1e293b;color:#94a3b8">${d.flag} ${d.country}</button>`).join('')}
+                style="background:#0f172a;border-color:#1e293b;color:#94a3b8">${d.flag} ${d.name}</button>`).join('')}
       </div>
     </div>
 
@@ -358,6 +358,45 @@ export const destinationDetailPage = (id: string) => {
         ${food.map((f: string) => `<span class="badge" style="background:#f59e0b11;color:#fbbf24;border:1px solid #f59e0b33">${f}</span>`).join('')}
       </div>
     </div>` : ''}
+
+    <!-- 여행 준비 도구 -->
+    <div>
+      <h3 class="font-bold text-sm text-slate-100 mb-3">🛠 여행 준비 도구</h3>
+      <div class="grid grid-cols-2 gap-2">
+        <a href="/tips?tab=currency&city=${encodeURIComponent(s.city)}&country=${encodeURIComponent(s.countryName)}" 
+           class="card p-3 flex items-center gap-2 press">
+          <span class="text-2xl">🏦</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">환전소 찾기</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">${s.city} 환전 정보</p>
+          </div>
+        </a>
+        <a href="/tips?tab=phrase" 
+           class="card p-3 flex items-center gap-2 press">
+          <span class="text-2xl">🗣️</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">현지 회화</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">기본 회화 보기</p>
+          </div>
+        </a>
+        <a href="/tips?tab=visa" 
+           class="card p-3 flex items-center gap-2 press">
+          <span class="text-2xl">🛂</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">비자 정보</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">입국 요건 확인</p>
+          </div>
+        </a>
+        <a href="/tips?tab=packing" 
+           class="card p-3 flex items-center gap-2 press">
+          <span class="text-2xl">🎒</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">짐 챙기기</p>
+            <p class="text-[10px] text-slate-500 mt-0.5">준비물 체크</p>
+          </div>
+        </a>
+      </div>
+    </div>
 
   </div>
 

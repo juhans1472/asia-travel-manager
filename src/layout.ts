@@ -6,6 +6,11 @@ export const COUNTRIES = [
   { code: 'CN', name: '중국',   flag: '🇨🇳', color: '#ef4444', cities: ['상하이', '베이징', '광저우', '청두'] },
   { code: 'VN', name: '베트남', flag: '🇻🇳', color: '#22c55e', cities: ['하노이', '다낭', '호치민', '나트랑'] },
   { code: 'TH', name: '태국',   flag: '🇹🇭', color: '#f59e0b', cities: ['방콕', '파타야', '치앙마이', '푸켓'] },
+  { code: 'TW', name: '대만',   flag: '🇹🇼', color: '#06b6d4', cities: ['타이베이', '타이중', '가오슝'] },
+  { code: 'SG', name: '싱가포르', flag: '🇸🇬', color: '#ef4444', cities: ['싱가포르'] },
+  { code: 'ID', name: '인도네시아', flag: '🇮🇩', color: '#dc2626', cities: ['발리', '자카르타'] },
+  { code: 'MY', name: '말레이시아', flag: '🇲🇾', color: '#0ea5e9', cities: ['쿠알라룸푸르', '페낭'] },
+  { code: 'HK', name: '홍콩',   flag: '🇭🇰', color: '#dc2626', cities: ['홍콩'] },
   { code: 'LA', name: '라오스', flag: '🇱🇦', color: '#a78bfa', cities: ['비엔티안', '루앙프라방', '방비엥'] },
 ]
 

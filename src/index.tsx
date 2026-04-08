@@ -8,6 +8,7 @@ import { cartPage } from './pages/cart'
 import { plannerPage } from './pages/planner'
 import { tipsPage } from './pages/tips'
 import { myPage } from './pages/mypage'
+import { destinationsPage, destinationDetailPage } from './pages/destinations'
 
 const app = new Hono()
 
@@ -49,6 +50,17 @@ app.get('/api/guides', (c) => {
 
 app.get('/api/bookings', (c) => {
   return c.json({ message: 'Bookings are stored client-side via localStorage' })
+})
+
+// 실시간 환율 API (ExchangeRate-API 사용)
+app.get('/api/exchange-rates', async (c) => {
+  try {
+    const response = await fetch('https://open.er-api.com/v6/latest/KRW')
+    const data = await response.json()
+    return c.json(data)
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch exchange rates' }, 500)
+  }
 })
 
 // ── 홈 ──────────────────────────────────────────────────
@@ -99,6 +111,18 @@ app.get('/tips', (c) => {
 app.get('/my', (c) => {
   const tab = c.req.query('tab') || 'bookings'
   return c.html(myPage(tab))
+})
+
+// ── 여행지 탐색 ────────────────────────────────────────
+app.get('/destinations', (c) => {
+  const country = c.req.query('country') || ''
+  const theme = c.req.query('theme') || ''
+  return c.html(destinationsPage(country, theme))
+})
+
+app.get('/destination/:id', (c) => {
+  const id = c.req.param('id')
+  return c.html(destinationDetailPage(id))
 })
 
 export default app

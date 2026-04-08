@@ -64,6 +64,31 @@ export const plannerPage = (destId = '', destCity = '', destCountry = '', destFl
       </div>
     </div>
 
+    <!-- 빠른 도구 -->
+    ${destCity && destCountry ? `
+    <div class="card p-4">
+      <h3 class="font-bold text-sm text-slate-200 mb-3">🛠 빠른 도구</h3>
+      <div class="grid grid-cols-2 gap-2">
+        <a href="/tips?tab=currency&city=${encodeURIComponent(destCity)}&country=${encodeURIComponent(destCountry)}" 
+           class="flex items-center gap-2 p-3 rounded-xl press" style="background:#22c55e11;border:1px solid #22c55e33">
+          <span class="text-xl">🏦</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">환전소 찾기</p>
+            <p class="text-[10px] text-slate-500">${destCity} 추천 환전소</p>
+          </div>
+        </a>
+        <a href="/tips?tab=phrase" 
+           class="flex items-center gap-2 p-3 rounded-xl press" style="background:#f59e0b11;border:1px solid #f59e0b33">
+          <span class="text-xl">🗣️</span>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-bold text-slate-200">현지 회화</p>
+            <p class="text-[10px] text-slate-500">기본 회화 보기</p>
+          </div>
+        </a>
+      </div>
+    </div>
+    ` : ''}
+
     <!-- 일별 일정 탭 -->
     <div>
       <div class="flex items-center justify-between mb-3">

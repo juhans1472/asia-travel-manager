@@ -31,9 +31,37 @@ export const tipsPage = (tab = 'currency') => {
 
     <!-- 환율 계산기 -->
     <div id="tip_currency" class="${tab!=='currency'?'hidden':''} space-y-4">
+      
+      <!-- 실시간 환율 조회 -->
       <div class="card p-4">
-        <h3 class="font-bold text-sm text-slate-200 mb-3">💴 환율 계산기 (참고용)</h3>
-        <p class="text-xs text-slate-500 mb-3">실시간이 아닌 참고용 환율입니다. 실제 환율은 달라질 수 있습니다.</p>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-sm text-slate-200">💴 실시간 환율</h3>
+          <button onclick="loadRealRates()" class="text-xs px-3 py-1 rounded-full press sky" style="background:#0ea5e922;border:1px solid #0ea5e944">
+            <span class="material-symbols-outlined text-xs" style="vertical-align:middle">refresh</span> 새로고침
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 mb-3" id="rateTime">실시간 환율을 불러오는 중...</p>
+        <div class="grid grid-cols-2 gap-3" id="realRatesGrid">
+          ${[
+            {code:'JPY', name:'일본 엔', flag:'🇯🇵'},
+            {code:'THB', name:'태국 바트', flag:'🇹🇭'},
+            {code:'VND', name:'베트남 동', flag:'🇻🇳'},
+            {code:'TWD', name:'대만 달러', flag:'🇹🇼'},
+            {code:'SGD', name:'싱가포르 달러', flag:'🇸🇬'},
+            {code:'IDR', name:'인도네시아 루피아', flag:'🇮🇩'},
+            {code:'MYR', name:'말레이시아 링깃', flag:'🇲🇾'},
+            {code:'HKD', name:'홍콩 달러', flag:'🇭🇰'},
+          ].map(c => `
+          <div class="card p-3">
+            <p class="text-xs text-slate-500 mb-1">${c.flag} ${c.name}</p>
+            <p class="text-base font-black sky" id="realRate_${c.code}">로딩중...</p>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- 환전 계산기 -->
+      <div class="card p-4">
+        <h3 class="font-bold text-sm text-slate-200 mb-3">🧮 환전 계산기</h3>
         <div class="space-y-3">
           <div>
             <label class="text-xs text-slate-500 mb-1 block">금액 (원)</label>
@@ -67,6 +95,28 @@ export const tipsPage = (tab = 'currency') => {
           <li>• 일본은 세븐일레븐 ATM (Wise/트래블로그 카드)</li>
           <li>• 트래블로그 체크카드 필수 지참 추천</li>
         </ul>
+      </div>
+
+      <!-- 환전소 찾기 -->
+      <div class="card p-4">
+        <h4 class="font-bold text-sm text-slate-200 mb-3">🏦 현지 환전소 찾기</h4>
+        <div class="space-y-2 mb-3">
+          <label class="text-xs text-slate-500 mb-1 block">국가/도시 선택</label>
+          <select id="exchangeCity" onchange="loadExchangeSpots()" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px;width:100%;outline:none;font-size:14px">
+            <option value="">선택하세요</option>
+            ${[
+              {country:'일본', cities:['도쿄','오사카','교토','삿포로']},
+              {country:'태국', cities:['방콕','푸켓','치앙마이','파타야']},
+              {country:'베트남', cities:['다낭','하노이','호치민','나트랑']},
+              {country:'대만', cities:['타이베이','타이중','가오슝']},
+              {country:'싱가포르', cities:['싱가포르']},
+              {country:'인도네시아', cities:['발리','자카르타']},
+              {country:'말레이시아', cities:['쿠알라룸푸르','페낭']},
+              {country:'홍콩', cities:['홍콩']},
+            ].map(c => c.cities.map(city => `<option value="${c.country}-${city}">${c.country} - ${city}</option>`).join('')).join('')}
+          </select>
+        </div>
+        <div id="exchangeSpotsList"></div>
       </div>
     </div>
 
@@ -229,7 +279,43 @@ export const tipsPage = (tab = 'currency') => {
 
   <script>
 (function(){
-  var RATES={JPY:{rate:0.0091,unit:'¥',decimals:0},THB:{rate:0.026,unit:'฿',decimals:1},VND:{rate:39.5,unit:'₫',decimals:0},TWD:{rate:0.024,unit:'NT$',decimals:1},SGD:{rate:0.00056,unit:'S$',decimals:2},IDR:{rate:11.5,unit:'Rp',decimals:0},MYR:{rate:0.0033,unit:'RM',decimals:2},USD:{rate:0.00073,unit:'$',decimals:2}};
+  var RATES={JPY:{rate:0.0091,unit:'¥',decimals:0},THB:{rate:0.026,unit:'฿',decimals:1},VND:{rate:39.5,unit:'₫',decimals:0},TWD:{rate:0.024,unit:'NT$',decimals:1},SGD:{rate:0.00056,unit:'S$',decimals:2},IDR:{rate:11.5,unit:'Rp',decimals:0},MYR:{rate:0.0033,unit:'RM',decimals:2},HKD:{rate:0.0093,unit:'HK$',decimals:2},USD:{rate:0.00073,unit:'$',decimals:2}};
+  var realRates={};
+
+  // 실시간 환율 불러오기
+  window.loadRealRates=function(){
+    var timeEl=document.getElementById('rateTime');
+    if(timeEl)timeEl.textContent='환율을 불러오는 중...';
+    fetch('/api/exchange-rates')
+      .then(function(r){return r.json();})
+      .then(function(data){
+        if(data&&data.rates){
+          realRates=data.rates;
+          var codes=['JPY','THB','VND','TWD','SGD','IDR','MYR','HKD'];
+          codes.forEach(function(code){
+            var rate=realRates[code];
+            if(rate){
+              var decimals=code==='VND'||code==='IDR'||code==='JPY'?0:code==='TWD'||code==='THB'?1:2;
+              var el=document.getElementById('realRate_'+code);
+              if(el){
+                var krw=1;
+                var converted=(krw*rate).toFixed(decimals);
+                var unit=RATES[code]?RATES[code].unit:code;
+                el.textContent=unit+' '+parseFloat(converted).toLocaleString();
+              }
+            }
+          });
+          if(timeEl){
+            var now=new Date();
+            timeEl.textContent='마지막 업데이트: '+now.toLocaleTimeString('ko-KR');
+          }
+        }
+      })
+      .catch(function(err){
+        console.error('환율 로딩 실패:',err);
+        if(timeEl)timeEl.textContent='환율 로딩 실패. 새로고침 버튼을 눌러주세요.';
+      });
+  };
 
   window.calcRate=function(){
     var inp=document.getElementById('krwAmount');
@@ -240,6 +326,107 @@ export const tipsPage = (tab = 'currency') => {
       var el=document.getElementById('rate_'+code);
       if(el)el.textContent=r.unit+' '+parseFloat(val).toLocaleString();
     });
+  };
+
+  // 환전소 데이터
+  var exchangeSpots={
+    '일본-도쿄':[
+      {name:'세븐은행 ATM',addr:'도쿄 전역 세븐일레븐',hours:'24시간',tip:'Wise/트래블로그 카드 추천'},
+      {name:'JTB 외화환전',addr:'시부야/신주쿠 지점',hours:'10:00-19:00',tip:'현금 환전 우대율'},
+      {name:'티켓레인저',addr:'신주쿠/이케부쿠로',hours:'10:00-20:00',tip:'한국어 가능'},
+    ],
+    '일본-오사카':[
+      {name:'세븐은행 ATM',addr:'오사카 전역',hours:'24시간',tip:'수수료 저렴'},
+      {name:'난바 환전소',addr:'난바역 인근',hours:'10:00-21:00',tip:'환율 우대'},
+    ],
+    '일본-교토':[
+      {name:'세븐은행 ATM',addr:'교토 전역',hours:'24시간',tip:'편의점 이용'},
+      {name:'교토역 환전',addr:'교토역 구내',hours:'09:00-20:00',tip:'역 내 편리'},
+    ],
+    '일본-삿포로':[
+      {name:'세븐은행 ATM',addr:'삿포로 전역',hours:'24시간',tip:'24시간 이용 가능'},
+      {name:'삿포로역 환전',addr:'삿포로역 구내',hours:'09:00-19:00',tip:'역 이용객 편리'},
+    ],
+    '태국-방콕':[
+      {name:'슈퍼리치(녹색)',addr:'센트럴월드/프라투남',hours:'09:00-18:00',tip:'최고 환율'},
+      {name:'슈퍼리치(주황)',addr:'BTS 나나역 인근',hours:'09:00-18:00',tip:'환율 우수'},
+      {name:'발루엔지',addr:'시암파라곤',hours:'10:00-21:00',tip:'쇼핑몰 내 편리'},
+    ],
+    '태국-푸켓':[
+      {name:'슈퍼리치 푸켓',addr:'빠통 해변',hours:'09:00-20:00',tip:'해변가 최고 환율'},
+      {name:'정타레이 환전',addr:'정실론 쇼핑몰',hours:'10:00-22:00',tip:'쇼핑 중 환전'},
+    ],
+    '태국-치앙마이':[
+      {name:'슈퍼리치 치앙마이',addr:'님만해민 로드',hours:'09:00-18:00',tip:'시내 중심'},
+      {name:'니만 환전소',addr:'님만해민 소이 1',hours:'10:00-20:00',tip:'관광객 많음'},
+    ],
+    '태국-파타야':[
+      {name:'TT환전소',addr:'워킹스트리트 입구',hours:'10:00-22:00',tip:'야경 보기 전 환전'},
+      {name:'센트럴페스티벌 환전',addr:'센트럴페스티벌 1층',hours:'10:00-21:00',tip:'쇼핑몰 내'},
+    ],
+    '베트남-다낭':[
+      {name:'비디드엔뜨엉',addr:'한시장 인근',hours:'08:00-21:00',tip:'최고 환율'},
+      {name:'공항 환전소',addr:'다낭 국제공항',hours:'24시간',tip:'도착 즉시 소액만'},
+    ],
+    '베트남-하노이':[
+      {name:'하노이 타워 환전',addr:'구시가지',hours:'08:00-20:00',tip:'관광객 많음'},
+      {name:'호안끼엠 환전소',addr:'호안끼엠 호수 근처',hours:'08:00-19:00',tip:'시내 중심'},
+    ],
+    '베트남-호치민':[
+      {name:'은히엔환전',addr:'벤탄시장 인근',hours:'08:00-21:00',tip:'시장 방문 전 환전'},
+      {name:'동커이 환전소',addr:'동커이 거리',hours:'09:00-20:00',tip:'쇼핑가 중심'},
+    ],
+    '베트남-나트랑':[
+      {name:'나트랑센터 환전',addr:'트란푸 거리',hours:'08:00-20:00',tip:'해변 접근성 좋음'},
+    ],
+    '대만-타이베이':[
+      {name:'타오위엔공항 환전',addr:'타오위엔 국제공항',hours:'24시간',tip:'도착 즉시 환전'},
+      {name:'타이베이역 환전',addr:'타이베이 메인역',hours:'09:00-21:00',tip:'시내 중심'},
+    ],
+    '대만-타이중':[
+      {name:'타이중역 환전',addr:'타이중역 구내',hours:'09:00-20:00',tip:'역 이용 편리'},
+    ],
+    '대만-가오슝':[
+      {name:'가오슝공항 환전',addr:'가오슝 국제공항',hours:'24시간',tip:'공항 환전'},
+    ],
+    '싱가포르-싱가포르':[
+      {name:'더 아케이드 환전',addr:'래플즈 플레이스',hours:'09:00-17:00',tip:'최고 환율'},
+      {name:'무스타파센터',addr:'리틀인디아',hours:'24시간',tip:'24시간 환전'},
+    ],
+    '인도네시아-발리':[
+      {name:'BMC 환전소',addr:'쿠타/스미냑',hours:'08:00-22:00',tip:'해변가 최고 환율'},
+      {name:'센트럴쿠타 환전',addr:'센트럴쿠타 몰',hours:'10:00-22:00',tip:'쇼핑몰 내'},
+    ],
+    '인도네시아-자카르타':[
+      {name:'그랜드인도네시아 환전',addr:'그랜드인도네시아 몰',hours:'10:00-21:00',tip:'시내 중심'},
+    ],
+    '말레이시아-쿠알라룸푸르':[
+      {name:'Mid Valley 환전',addr:'미드밸리 메가몰',hours:'10:00-22:00',tip:'쇼핑 중 환전'},
+      {name:'KL센트럴 환전',addr:'KL센트럴역',hours:'08:00-22:00',tip:'교통 허브'},
+    ],
+    '말레이시아-페낭':[
+      {name:'거니플라자 환전',addr:'거니 드라이브',hours:'10:00-21:00',tip:'해변 인근'},
+    ],
+    '홍콩-홍콩':[
+      {name:'침사추이 환전소',addr:'네이션 로드',hours:'09:00-21:00',tip:'최고 환율'},
+      {name:'센트럴 환전',addr:'센트럴역 인근',hours:'09:00-19:00',tip:'금융가 중심'},
+    ],
+  };
+
+  window.loadExchangeSpots=function(){
+    var sel=document.getElementById('exchangeCity');
+    var list=document.getElementById('exchangeSpotsList');
+    if(!sel||!list)return;
+    var key=sel.value;
+    if(!key){list.innerHTML='<p class=\"text-sm text-slate-400 text-center py-4\">도시를 선택해주세요</p>';return;}
+    var spots=exchangeSpots[key];
+    if(!spots||spots.length===0){
+      list.innerHTML='<p class=\"text-sm text-slate-400 text-center py-4\">해당 도시의 환전소 정보가 없습니다</p>';
+      return;
+    }
+    list.innerHTML='<div class=\"space-y-2 mt-3\">'+spots.map(function(s){
+      return '<div class=\"card p-3\"><div class=\"flex items-start gap-3\"><div class=\"w-8 h-8 rounded-lg flex items-center justify-center text-lg flex-shrink-0\" style=\"background:#22c55e22\">🏦</div><div class=\"flex-1 min-w-0\"><p class=\"text-sm font-bold text-slate-200\">'+s.name+'</p><p class=\"text-xs text-slate-500 mt-0.5\">📍 '+s.addr+'</p><p class=\"text-xs text-slate-500\">🕐 '+s.hours+'</p><p class=\"text-xs sky mt-1\">💡 '+s.tip+'</p></div></div></div>';
+    }).join('')+'</div>';
   };
 
   window.switchTip=function(key){
@@ -267,7 +454,21 @@ export const tipsPage = (tab = 'currency') => {
 
   window.savePacking=function(){};
 
+  // URL 파라미터로 도시 자동 선택
+  var params=new URLSearchParams(location.search);
+  var cityParam=params.get('city');
+  var countryParam=params.get('country');
+  if(cityParam&&countryParam){
+    var sel=document.getElementById('exchangeCity');
+    if(sel){
+      var key=countryParam+'-'+cityParam;
+      sel.value=key;
+      window.loadExchangeSpots();
+    }
+  }
+
   window.calcRate();
+  window.loadRealRates();
 })();
   </script>
   `
