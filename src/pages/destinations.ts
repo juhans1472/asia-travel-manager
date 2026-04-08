@@ -51,7 +51,7 @@ export const destinationsPage = (country = '', theme = '') => {
       <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="console.log('📝 Input event!', event.target.value); filterSpots();" onkeydown="if(event.key==='Enter'){console.log('⏎ Enter pressed!'); filterSpots();}" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
     </div>
     <!-- Debug info -->
-    <div id="debugInfo" class="mt-2 text-xs" style="color:#22c55e;font-family:monospace"></div>
+    <div id="debugInfo" class="mt-2 p-2 rounded" style="background:#0f172a;border:1px solid #22c55e;color:#22c55e;font-family:monospace;font-size:11px"></div>
   </header>
 
   <div class="pb-28 pt-4">
@@ -119,9 +119,13 @@ export const destinationsPage = (country = '', theme = '') => {
       var searchText=(s.name+s.city+s.countryName+s.tags.join('')+'환전소환전환율').toLowerCase();
       var matchS=!q||searchText.indexOf(q)>=0;
       
-      // 디버그: 각 항목의 매칭 상태
-      if(q){
-        console.log('[Filter]', s.city, s.name, '| matchC:', matchC, 'matchT:', matchT, 'matchS:', matchS, '| searchText includes "'+q+'":', searchText.indexOf(q)>=0);
+      // 디버그: 각 항목의 매칭 상태 (처음 3개만)
+      if(q && filtered.length < 3){
+        console.log('[Filter]', s.city, s.name);
+        console.log('  matchC:', matchC, '(country:', s.country, 'vs', curCountry||'all', ')');
+        console.log('  matchT:', matchT, '(theme:', s.theme, 'vs', curTheme||'all', ')');
+        console.log('  matchS:', matchS, '(searchText:', searchText.substring(0, 50)+'...', ')');
+        console.log('  indexOf("'+q+'"):', searchText.indexOf(q));
       }
       
       return matchC&&matchT&&matchS;
@@ -133,6 +137,16 @@ export const destinationsPage = (country = '', theme = '') => {
     var rc=document.getElementById('resultCount');
     
     console.log('[Render] DOM elements - spotList:', el, 'emptyState:', em, 'resultCount:', rc);
+    
+    // Update debug info with result
+    var debug=document.getElementById('debugInfo');
+    if(debug){
+      debug.innerHTML='🔍 검색어: <strong>"'+(curSearch||'(없음)')+'"</strong><br>'
+        +'📊 총 데이터: '+spots.length+'개<br>'
+        +'🌍 국가필터: '+(curCountry||'전체')+' | 🎨 테마필터: '+(curTheme||'전체')+'<br>'
+        +'✅ <strong style="color:#22c55e;font-size:14px">검색결과: '+filtered.length+'개</strong><br>'
+        +'⏰ '+new Date().toLocaleTimeString();
+    }
     
     if(rc)rc.textContent=filtered.length;
     if(filtered.length===0){if(el)el.innerHTML='';if(em)em.classList.remove('hidden');console.log('[Render] No results, showing empty state');return;}
@@ -204,7 +218,10 @@ export const destinationsPage = (country = '', theme = '') => {
     // Update debug info
     var debug=document.getElementById('debugInfo');
     if(debug){
-      debug.textContent='✅ 검색 작동중 | 검색어: "'+curSearch+'" | 시간: '+new Date().toLocaleTimeString();
+      debug.innerHTML='🔍 검색어: <strong>"'+curSearch+'"</strong><br>'
+        +'📊 총 데이터: '+spots.length+'개<br>'
+        +'🌍 국가필터: '+(curCountry||'전체')+' | 🎨 테마필터: '+(curTheme||'전체')+'<br>'
+        +'⏰ '+new Date().toLocaleTimeString();
     }
     
     render();
