@@ -273,14 +273,19 @@ export const destinationsPage = (country = '', theme = '') => {
         if(liveText) liveText.textContent = val || '(비어있음)';
         if(eventStatus) eventStatus.textContent = '✅ 이벤트 발생! (' + new Date().toLocaleTimeString() + ')';
         
-        window.filterSpots();
+        // ✅ curSearch 직접 업데이트
+        curSearch = val;
+        console.log('✅ [addEventListener] curSearch updated to:', curSearch);
+        render();
       });
       
       // Enter 키 이벤트
       searchInput.addEventListener('keydown', function(e){
         if(e.key === 'Enter'){
           console.log('⏎ Enter key pressed!');
-          window.filterSpots();
+          curSearch = e.target.value;
+          console.log('✅ [Enter] curSearch updated to:', curSearch);
+          render();
         }
       });
       
