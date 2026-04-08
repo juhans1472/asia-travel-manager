@@ -150,9 +150,15 @@ export const destinationsPage = (country = '', theme = '') => {
         +'<div class="flex gap-1 flex-wrap">'
         +s.tags.map(function(t){return '<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">'+t+'</span>';}).join('')
         +'</div>'
-        +'<div class="flex gap-2 mt-3">'
+        +'<div class="space-y-2 mt-3">'
+        +'<div class="flex gap-2">'
         +'<a href="/destination/'+s.id+'" onclick="window.TM&&window.TM.addRecent({id:\''+s.id+'\',type:\'dest\',name:\''+s.name+'\',country:\''+s.countryName+'\',flag:\''+s.flag+'\',city:\''+s.city+'\'})" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press sky" style="background:#0ea5e922;border:1px solid #0ea5e944">상세 보기</a>'
         +'<a href="/planner?dest='+s.id+'&city='+encodeURIComponent(s.city)+'&country='+encodeURIComponent(s.countryName)+'" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press text-white" style="background:#0ea5e9">일정 추가</a>'
+        +'</div>'
+        +'<a href="/tips?tab=currency&city='+encodeURIComponent(s.city)+'&country='+encodeURIComponent(s.countryName)+'" class="w-full flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold press" style="background:#22c55e11;color:#22c55e;border:1px solid #22c55e33">'
+        +'<span class="material-symbols-outlined text-sm">account_balance</span>'
+        +s.city+' 환전소 찾기'
+        +'</a>'
         +'</div></div></div>';
     }).join('');
   }
@@ -488,9 +494,15 @@ function spotCard(s: typeof ALL_SPOTS[0]) {
     <div class="flex gap-1 flex-wrap">
       ${s.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">${t}</span>`).join('')}
     </div>
-    <div class="flex gap-2 mt-3">
-      <a href="/destination/${s.id}" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press sky" style="background:#0ea5e922;border:1px solid #0ea5e944">상세 보기</a>
-      <a href="/planner?dest=${s.id}&city=${encodeURIComponent(s.city)}&country=${encodeURIComponent(s.countryName)}" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press text-white" style="background:#0ea5e9">일정 추가</a>
+    <div class="space-y-2 mt-3">
+      <div class="flex gap-2">
+        <a href="/destination/${s.id}" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press sky" style="background:#0ea5e922;border:1px solid #0ea5e944">상세 보기</a>
+        <a href="/planner?dest=${s.id}&city=${encodeURIComponent(s.city)}&country=${encodeURIComponent(s.countryName)}" class="flex-1 text-center py-2 rounded-xl text-xs font-bold press text-white" style="background:#0ea5e9">일정 추가</a>
+      </div>
+      <a href="/tips?tab=currency&city=${encodeURIComponent(s.city)}&country=${encodeURIComponent(s.countryName)}" class="w-full flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-bold press" style="background:#22c55e11;color:#22c55e;border:1px solid #22c55e33">
+        <span class="material-symbols-outlined text-sm">account_balance</span>
+        ${s.city} 환전소 찾기
+      </a>
     </div>
   </div>
 </div>`
