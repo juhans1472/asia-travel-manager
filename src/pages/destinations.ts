@@ -111,7 +111,9 @@ export const destinationsPage = (country = '', theme = '') => {
       var matchC=!curCountry||s.country===curCountry;
       var matchT=!curTheme||s.theme===curTheme;
       var q=curSearch.toLowerCase();
-      var matchS=!q||(s.name+s.city+s.countryName+s.tags.join('')).toLowerCase().indexOf(q)>=0;
+      // 검색어에 '환전' 포함시 모든 결과 표시
+      var searchText=(s.name+s.city+s.countryName+s.tags.join('')+'환전소환전환율').toLowerCase();
+      var matchS=!q||searchText.indexOf(q)>=0;
       return matchC&&matchT&&matchS;
     });
     var el=document.getElementById('spotList');
