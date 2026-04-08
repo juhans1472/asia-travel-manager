@@ -11,7 +11,7 @@ export const homePage = () => {
       <div class="flex items-center gap-2">
         <span class="text-xl">🧭</span>
         <div class="leading-none">
-          <p class="font-black text-base text-white tracking-tight">가이드 여행매니저</p>
+          <p class="font-black text-base text-white tracking-tight">로컬 여행매니저</p>
           <p class="text-[10px] text-slate-500 mt-0.5">현지 가이드가 직접 짜주는 코스</p>
         </div>
       </div>
