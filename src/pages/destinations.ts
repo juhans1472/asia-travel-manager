@@ -189,7 +189,7 @@ export const destinationsPage = (country = '', theme = '') => {
         +'<span>⏱ '+s.days+'</span>'
         +'</div>'
         +'<div class="flex gap-1 flex-wrap">'
-        +s.tags.map(function(t){return '<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">'+t+'</span>';}).join('')
+        +((s.tags && Array.isArray(s.tags)) ? s.tags.map(function(t){return '<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">'+t+'</span>';}).join('') : '')
         +'</div>'
         +'<div class="space-y-2 mt-3">'
         +'<div class="flex gap-2">'
@@ -407,7 +407,7 @@ export const destinationDetailPage = (id: string) => {
         </div>
       </div>
       <div class="flex gap-2 flex-wrap mt-3">
-        ${s.tags.map((t: string) => `<span class="badge" style="background:#0ea5e911;color:#38bdf8;border:1px solid #0ea5e922">${t}</span>`).join('')}
+        ${(s.tags && Array.isArray(s.tags)) ? s.tags.map((t: string) => `<span class="badge" style="background:#0ea5e911;color:#38bdf8;border:1px solid #0ea5e922">${t}</span>`).join('') : ''}
       </div>
       <div class="grid grid-cols-3 gap-2 mt-4">
         <div class="card p-3 text-center">
@@ -599,7 +599,7 @@ function spotCard(s: typeof ALL_SPOTS[0]) {
       <span>⏱ ${s.days}</span>
     </div>
     <div class="flex gap-1 flex-wrap">
-      ${s.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">${t}</span>`).join('')}
+      ${(s.tags && Array.isArray(s.tags)) ? s.tags.map(t => `<span class="text-[10px] px-2 py-0.5 rounded-full" style="background:#0ea5e911;color:#38bdf8">${t}</span>`).join('') : ''}
     </div>
     <div class="space-y-2 mt-3">
       <div class="flex gap-2">
