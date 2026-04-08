@@ -48,8 +48,10 @@ export const destinationsPage = (country = '', theme = '') => {
     <!-- 검색창 -->
     <div class="mt-3 relative">
       <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
-      <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="filterSpots()" onkeydown="if(event.key==='Enter')filterSpots()" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
+      <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="console.log('📝 Input event!', event.target.value); filterSpots();" onkeydown="if(event.key==='Enter'){console.log('⏎ Enter pressed!'); filterSpots();}" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
     </div>
+    <!-- Debug info -->
+    <div id="debugInfo" class="mt-2 text-xs" style="color:#22c55e;font-family:monospace"></div>
   </header>
 
   <div class="pb-28 pt-4">
@@ -100,10 +102,12 @@ export const destinationsPage = (country = '', theme = '') => {
 
   <script>
 (function(){
+  console.log('🔍 [DEBUG] Search script loaded at', new Date().toISOString());
   var spots=${JSON.stringify(ALL_SPOTS)};
   var curCountry='${country}';
   var curTheme='${theme}';
   var curSearch='';
+  console.log('🔍 [DEBUG] Initial data:', spots.length, 'spots loaded');
 
   function render(){
     console.log('[Render] Starting render. curCountry:', curCountry, 'curTheme:', curTheme, 'curSearch:', curSearch);
@@ -181,9 +185,18 @@ export const destinationsPage = (country = '', theme = '') => {
     render();
   };
   window.filterSpots=function(){
+    console.log('🔍 [DEBUG] filterSpots() function called!');
     var inp=document.getElementById('searchInput');
+    console.log('🔍 [DEBUG] Input element:', inp);
     curSearch=inp?inp.value:'';
-    console.log('[Search] filterSpots called. curSearch:', curSearch);
+    console.log('🔍 [DEBUG] curSearch value:', curSearch);
+    
+    // Update debug info
+    var debug=document.getElementById('debugInfo');
+    if(debug){
+      debug.textContent='✅ 검색 작동중 | 검색어: "'+curSearch+'" | 시간: '+new Date().toLocaleTimeString();
+    }
+    
     render();
   };
   window.toggleFavSpot=function(btn,id,name,country,flag,city,category){
