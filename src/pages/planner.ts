@@ -352,8 +352,8 @@ export const plannerPage = (destId = '', destCity = '', destCountry = '', destFl
         +(totalCost>0?'<p class="text-xs sky">💰 '+totalCost.toLocaleString()+'원</p>':'')
         +'</div>'
         +'<div class="flex gap-2">'
-        +'<button onclick="loadThisTrip(\''+t.id+'\')" class="text-xs font-bold sky press" style="background:#0ea5e922;padding:6px 10px;border-radius:8px">불러오기</button>'
-        +'<button onclick="deleteTrip(\''+t.id+'\')" class="text-slate-500 press"><span class="material-symbols-outlined text-base">delete</span></button>'
+        +'<button onclick="loadThisTrip(&quot;'+t.id+'&quot;)" class="text-xs font-bold sky press" style="background:#0ea5e922;padding:6px 10px;border-radius:8px">불러오기</button>'
+        +'<button onclick="deleteTrip(&quot;'+t.id+'&quot;)" class="text-slate-500 press"><span class="material-symbols-outlined text-base">delete</span></button>'
         +'</div>'
         +'</div>';
     }).join('');
