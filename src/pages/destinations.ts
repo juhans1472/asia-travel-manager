@@ -129,15 +129,6 @@ export const destinationsPage = (country = '', theme = '') => {
       var searchText=(s.name+s.city+s.countryName+tagsText+'환전소환전환율').toLowerCase();
       var matchS=!q||searchText.indexOf(q)>=0;
       
-      // 디버그: 각 항목의 매칭 상태 (처음 3개만)
-      if(q && filtered.length < 3){
-        console.log('[Filter]', s.city, s.name);
-        console.log('  matchC:', matchC, '(country:', s.country, 'vs', curCountry||'all', ')');
-        console.log('  matchT:', matchT, '(theme:', s.theme, 'vs', curTheme||'all', ')');
-        console.log('  matchS:', matchS, '(searchText:', searchText.substring(0, 50)+'...', ')');
-        console.log('  indexOf("'+q+'"):', searchText.indexOf(q));
-      }
-      
       return matchC&&matchT&&matchS;
     });
     console.log('[Render] Filtered results:', filtered.length, '/ Total:', spots.length);
