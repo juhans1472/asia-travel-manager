@@ -50,11 +50,16 @@ export const destinationsPage = (country = '', theme = '') => {
       <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
       <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="console.log('📝 Input event!', event.target.value); filterSpots();" onkeydown="if(event.key==='Enter'){console.log('⏎ Enter pressed!'); filterSpots();}" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
     </div>
-    <!-- Debug info -->
-    <div id="debugInfo" class="mt-2 p-2 rounded" style="background:#0f172a;border:1px solid #22c55e;color:#22c55e;font-family:monospace;font-size:11px"></div>
   </header>
 
   <div class="pb-28 pt-4">
+
+    <!-- Debug info -->
+    <div class="px-4 mb-3">
+      <div id="debugInfo" class="p-3 rounded-lg" style="background:#0f172a;border:2px solid #22c55e;color:#22c55e;font-family:monospace;font-size:12px;line-height:1.6">
+        초기화 중...
+      </div>
+    </div>
 
     <!-- 국가 필터 -->
     <div class="px-4 mb-4">
