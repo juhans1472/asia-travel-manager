@@ -15,6 +15,11 @@ export const guidesPage = (country = '') => {
       </a>
       <h1 class="flex-1 font-bold text-base text-slate-100">현지 가이드</h1>
     </div>
+    <!-- 검색창 -->
+    <div class="mt-2 relative">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
+      <input id="guideSearch" type="text" placeholder="가이드 이름, 도시 검색..." oninput="renderGuides()" onkeydown="if(event.key==='Enter')renderGuides()" style="background:#13131a;border:1px solid #1e1e2e;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
+    </div>
     <div class="flex gap-2 overflow-x-auto ns pb-1 mt-3">
       <button onclick="filterG('')" id="gfALL" class="cf-btn active flex-shrink-0 px-3 py-1.5 rounded-full border text-xs font-bold press" style="background:#f59e0b;color:#0a0a0f;border-color:#f59e0b">전체</button>
       ${COUNTRIES.map(c => `<button onclick="filterG('${c.code}')" id="gf${c.code}" class="cf-btn flex-shrink-0 px-3 py-1.5 rounded-full border text-xs font-bold press" style="background:#13131a;border-color:#1e1e2e;color:#94a3b8">${c.flag} ${c.name}</button>`).join('')}
@@ -28,11 +33,17 @@ export const guidesPage = (country = '') => {
   <script>
 (function(){
   var guides=${JSON.stringify(ALL_GUIDES)};
-  window.filterG=function(code){
-    document.querySelectorAll('.cf-btn').forEach(function(b){b.style.background='#13131a';b.style.color='#94a3b8';b.style.borderColor='#1e1e2e';});
-    var btn=document.getElementById('gf'+(code||'ALL'));
-    if(btn){btn.style.background='#f59e0b';btn.style.color='#0a0a0f';btn.style.borderColor='#f59e0b';}
-    var filtered=code?guides.filter(function(g){return g.country===code;}):guides;
+  var curCountry='';
+  var curSearch='';
+  
+  window.renderGuides=function(){
+    var q=(document.getElementById('guideSearch')||{value:''}).value.toLowerCase();
+    curSearch=q;
+    var filtered=guides.filter(function(g){
+      var mc=!curCountry||g.country===curCountry;
+      var ms=!q||(g.name+g.city+g.tagline+(g.themes||[]).join('')+(g.tags||[]).join('')).toLowerCase().indexOf(q)>=0;
+      return mc&&ms;
+    });
     var el=document.getElementById('guideList');
     if(!el)return;
     el.innerHTML=filtered.map(function(g){
@@ -61,6 +72,14 @@ export const guidesPage = (country = '') => {
         +'</div>'
         +'</a>';
     }).join('');
+  };
+  
+  window.filterG=function(code){
+    curCountry=code;
+    document.querySelectorAll('.cf-btn').forEach(function(b){b.style.background='#13131a';b.style.color='#94a3b8';b.style.borderColor='#1e1e2e';});
+    var btn=document.getElementById('gf'+(code||'ALL'));
+    if(btn){btn.style.background='#f59e0b';btn.style.color='#0a0a0f';btn.style.borderColor='#f59e0b';}
+    renderGuides();
   };
 
 })();

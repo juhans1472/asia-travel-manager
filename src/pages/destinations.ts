@@ -48,7 +48,7 @@ export const destinationsPage = (country = '', theme = '') => {
     <!-- 검색창 -->
     <div class="mt-3 relative">
       <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
-      <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="filterSpots()" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
+      <input type="text" id="searchInput" placeholder="국가, 도시, 관광지, 환전 검색..." oninput="filterSpots()" onkeydown="if(event.key==='Enter')filterSpots()" style="background:#0f172a;border:1px solid #1e293b;color:#f1f5f9;border-radius:12px;padding:10px 14px 10px 44px;width:100%;outline:none;font-size:14px">
     </div>
   </header>
 

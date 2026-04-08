@@ -24,7 +24,7 @@ export const toursPage = (country = '', theme = '') => {
     <!-- 검색 -->
     <div class="mt-2 relative">
       <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl">search</span>
-      <input id="tourSearch" type="text" placeholder="도시, 테마, 가이드 검색..." class="pl-10" oninput="renderTours()">
+      <input id="tourSearch" type="text" placeholder="도시, 테마, 가이드 검색..." class="pl-10" oninput="renderTours()" onkeydown="if(event.key==='Enter')renderTours()">
     </div>
     <!-- 국가 탭 -->
     <div class="flex gap-2 overflow-x-auto ns pb-1 mt-2">
