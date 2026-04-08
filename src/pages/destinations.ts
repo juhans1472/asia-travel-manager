@@ -118,12 +118,22 @@ export const destinationsPage = (country = '', theme = '') => {
       // 검색어에 '환전' 포함시 모든 결과 표시
       var searchText=(s.name+s.city+s.countryName+s.tags.join('')+'환전소환전환율').toLowerCase();
       var matchS=!q||searchText.indexOf(q)>=0;
+      
+      // 디버그: 각 항목의 매칭 상태
+      if(q){
+        console.log('[Filter]', s.city, s.name, '| matchC:', matchC, 'matchT:', matchT, 'matchS:', matchS, '| searchText includes "'+q+'":', searchText.indexOf(q)>=0);
+      }
+      
       return matchC&&matchT&&matchS;
     });
     console.log('[Render] Filtered results:', filtered.length, '/ Total:', spots.length);
+    
     var el=document.getElementById('spotList');
     var em=document.getElementById('emptyState');
     var rc=document.getElementById('resultCount');
+    
+    console.log('[Render] DOM elements - spotList:', el, 'emptyState:', em, 'resultCount:', rc);
+    
     if(rc)rc.textContent=filtered.length;
     if(filtered.length===0){if(el)el.innerHTML='';if(em)em.classList.remove('hidden');console.log('[Render] No results, showing empty state');return;}
     if(em)em.classList.add('hidden');
