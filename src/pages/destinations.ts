@@ -250,28 +250,40 @@ export const destinationsPage = (country = '', theme = '') => {
     }
   }
   
-  // ✅ addEventListener로 이벤트 직접 연결
-  var searchInput = document.getElementById('searchInput');
-  if(searchInput){
-    console.log('✅ [Setup] Attaching event listeners to searchInput');
+  // ✅ 이벤트 리스너 설정 함수
+  function setupSearchListeners(){
+    var searchInput = document.getElementById('searchInput');
+    console.log('🔧 [Setup] Trying to attach listeners. Element:', searchInput);
     
-    // input 이벤트 (타이핑할 때마다)
-    searchInput.addEventListener('input', function(e){
-      console.log('📝 Input event detected!', e.target.value);
-      window.filterSpots();
-    });
-    
-    // Enter 키 이벤트
-    searchInput.addEventListener('keydown', function(e){
-      if(e.key === 'Enter'){
-        console.log('⏎ Enter key pressed!');
+    if(searchInput){
+      console.log('✅ [Setup] searchInput found! Attaching event listeners...');
+      
+      // input 이벤트 (타이핑할 때마다)
+      searchInput.addEventListener('input', function(e){
+        console.log('📝 Input event detected!', e.target.value);
         window.filterSpots();
-      }
-    });
-    
-    console.log('✅ [Setup] Event listeners attached successfully');
-  } else {
-    console.error('❌ [Setup] searchInput element not found!');
+      });
+      
+      // Enter 키 이벤트
+      searchInput.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+          console.log('⏎ Enter key pressed!');
+          window.filterSpots();
+        }
+      });
+      
+      console.log('✅ [Setup] Event listeners attached successfully');
+    } else {
+      console.error('❌ [Setup] searchInput element not found!');
+    }
+  }
+  
+  // 즉시 실행
+  setupSearchListeners();
+  
+  // DOMContentLoaded 이후에도 실행 (안전장치)
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setupSearchListeners);
   }
   
   render();
