@@ -220,15 +220,6 @@ export const destinationsPage = (country = '', theme = '') => {
     curSearch=inp?inp.value:'';
     console.log('🔍 [DEBUG] curSearch value:', curSearch);
     
-    // Update debug info
-    var debug=document.getElementById('debugInfo');
-    if(debug){
-      debug.innerHTML='🔍 검색어: <strong>"'+curSearch+'"</strong><br>'
-        +'📊 총 데이터: '+spots.length+'개<br>'
-        +'🌍 국가필터: '+(curCountry||'전체')+' | 🎨 테마필터: '+(curTheme||'전체')+'<br>'
-        +'⏰ '+new Date().toLocaleTimeString();
-    }
-    
     render();
   };
   window.toggleFavSpot=function(btn,id,name,country,flag,city,category){
